@@ -9,12 +9,26 @@ namespace ManageOradersSystem.ViewModel
 {
     public class BasketItemViewModel: ViewModelBase
     {
-        private readonly BasketItem _model;
-        public BasketItemViewModel(BasketItem model)
+        private readonly NewBasketItem _model;
+        public BasketItemViewModel(NewBasketItem model)
         {
             _model = model;
         }
 
+        // 新增便捷构造函数
+        public BasketItemViewModel(int idBasketItem, short? idProduct, string nameProduct,
+                                 decimal? priceProduct, byte? quantity, int? idBasket)
+        {
+            _model = new NewBasketItem
+            {
+                IdBasketItem = idBasketItem,
+                IdProduct = idProduct,
+                NameProduct = nameProduct,
+                PriceProduct = priceProduct,
+                Quantity = quantity,
+                IdBasket = idBasket
+            };
+        }
 
         //public int Id => _model.Id;
 
@@ -37,7 +51,25 @@ namespace ManageOradersSystem.ViewModel
                 RaisePropertyChanged();
             }
         }
+        public string? NameProduct
+        {
+            get => _model.NameProduct;
+            set
+            {
+                _model.NameProduct = value;
+                RaisePropertyChanged();
+            }
+        }
 
+        public decimal? PriceProduct
+        {
+            get => _model.PriceProduct;
+            set
+            {
+                _model.PriceProduct = value;
+                RaisePropertyChanged();
+            }
+        }
         public byte? Quantity
         {
             get => _model.Quantity;
@@ -78,5 +110,7 @@ namespace ManageOradersSystem.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+
     }
 }

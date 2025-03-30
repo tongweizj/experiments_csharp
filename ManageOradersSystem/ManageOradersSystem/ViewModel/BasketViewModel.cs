@@ -9,8 +9,8 @@ namespace ManageOradersSystem.ViewModel
 {
     class BasketViewModel: ViewModelBase
     {
-        private readonly Basket _model;
-        public BasketViewModel(Basket model)
+        private readonly NewBasket _model;
+        public BasketViewModel(NewBasket model)
         {
             _model = model;
         }
@@ -37,7 +37,15 @@ namespace ManageOradersSystem.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        public string? NameShopper
+        {
+            get => _model.NameShopper;
+            set
+            {
+                _model.NameShopper = value;
+                RaisePropertyChanged();
+            }
+        }
         public byte? Quantity
         {
             get => _model.Quantity;
