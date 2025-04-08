@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        /*
+        Console.WriteLine("This is a list");
+        List<string> names = new List<string>();
+
+        names.Add("Arpit");
+        names.Add("Bob");
+
+        Console.WriteLine("Printing values from the List");
+        foreach(string name in names)
+        {
+            Console.WriteLine(name);
+        }
+
+        */
+
+        /*
+        Console.WriteLine("This is a Dictionary");
+        Dictionary<int, string> names = new Dictionary<int, string>();
+        names.Add(1, "Arpit");
+        names.Add(2, "Bob");
+
+        Console.WriteLine("Printing values from Dictionaty");
+        foreach(KeyValuePair<int, string> name in names) {
+            Console.WriteLine("ID " + name.Key + " belongs to " + name.Value);
+        }
+        */
+        /*
+        Console.WriteLine("Hashset");
+        HashSet<string> names = new HashSet<string>();
+        names.Add("Arpit");
+        names.Add("Bob");
+
+        Console.WriteLine("Printing values");
+        foreach(string i in names)
+        {
+            Console.WriteLine(i);
+        }
+        */
+
+        /*
+        Console.WriteLine("Stack");
+        Stack<int> stack = new Stack<int>();
+
+        stack.Push(1);
+        stack.Push(2);
+        stack.Push(3);
+
+        Console.WriteLine("Printing Stack");
+        while(stack.Count > 0)
+        {
+            Console.WriteLine(stack.Pop());
+        }
+        */
+
+
+        Console.WriteLine(" Queue");
+        Queue<string> queue = new Queue<string>();
+        queue.Enqueue("1");
+        queue.Enqueue("2");
+        queue.Enqueue("3");
+
+        Console.WriteLine("Printing");
+        while(queue.Count > 0)
+        {
+            Console.WriteLine(queue.Dequeue());
+        }
+
+    }
+}

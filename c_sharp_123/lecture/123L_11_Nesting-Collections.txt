@@ -1,0 +1,20 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Dictionary<string,List<int>> students = new Dictionary<string,List<int>>();
+
+
+        students.Add("Arpit",new List<int> { 80,50,70});
+        students.Add("Bob", new List<int> { 90, 70, 40 });
+
+        Console.WriteLine("Printing the values for Arpit: ");
+        foreach(int value in students["Arpit"])
+        {
+            Console.WriteLine(value);
+        }
+    }
+}

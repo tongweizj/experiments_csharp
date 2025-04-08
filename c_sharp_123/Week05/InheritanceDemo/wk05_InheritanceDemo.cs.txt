@@ -1,0 +1,163 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace InheritanceDemo
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //TestMcDonalds();
+            //TestAbstract();
+            TestHidden();
+        }
+        static void TestHidden()
+        {
+            //Parent p1 = new Parent();
+            //p1.Foo();
+            //p1.Bar();
+
+            //Parent p2 = new Child1();
+            //p2.Foo();
+            //p2.Bar();
+
+            Child2 p3 = new Child2();
+            p3.Bar();
+            p3.Foo();
+           ((Parent) p3).Foo();
+        }
+        static void TestAbstract()
+        {
+            //Figure2D figure = new Figure2D(10, 20); //this does not work
+
+            List<Figure2D> list = new List<Figure2D>()
+            {
+                new Triangle(20, 5),
+                new Rectangle(4, 3),
+                new Square(5)
+            };
+
+            foreach (Figure2D figure in list) 
+            {
+                Console.WriteLine(figure);
+            }
+        }
+        static void TestMcDonalds()
+        {
+            Server ayushi = new Server("Ayushi");
+            Console.WriteLine(ayushi);
+
+            Supervisor supervisor = new Supervisor("Kevin");
+            Console.WriteLine(supervisor);
+
+            Manager manager = new Manager("Apple");
+            Console.WriteLine(manager);
+        }
+    }
+    #region McDonalds
+    //server, supervisor, store manager
+    class Server
+    {
+        protected double wages;
+        protected List<string> duties;
+        public string Name { get; }
+        public Server(string name)
+        {
+            Name = name;
+            wages = 17;
+            duties = new List<string>()
+            {
+                "Take order",
+                "Take cash",
+                "Deliver the order",
+                "Clean tables",
+                "Mop the floor"
+            };
+        }
+        public override string ToString()
+        {
+            return $"I am {Name}, my wage is {wages:C}, my duities are {string.Join(", ", duties)}";
+        }
+    }
+    class Supervisor : Server
+    {
+        public Supervisor(string name)
+            : base(name)
+        {
+            wages = 25;
+            duties.Add("Schedule shifts");
+        }
+    }
+    class Manager : Supervisor
+    {
+        public Manager(string name)
+            : base(name)
+        {
+            wages = 28;
+            duties.Add("Maintain inventory");
+        }
+    }
+    #endregion
+
+    #region abstract class
+    abstract class Figure2D  //abstract classes may not be intantiated
+    {
+        public double Length { get; }
+        public double Width { get; }
+        public abstract double Area { get; } //when implementation is missing
+        public Figure2D(double length, double width)
+            => (Length, Width) = (length, width);
+
+        public override string ToString()
+            => $"[{Length}, {Width}] -> {Area}";
+    }
+    class Triangle : Figure2D
+    {
+        public override double Area => Length * Width * 0.5;
+        public Triangle(double length, double width)
+            : base(length, width)
+        { }
+    }
+    class Rectangle : Figure2D
+    {
+        public override double Area => Length * Width;
+        public Rectangle(double length, double width)
+            : base(length, width)
+        { }
+    }
+    class Square : Rectangle 
+    {
+        public Square(double length)
+            : base(length, length)
+        { }
+
+        public override string ToString()
+            => $"[{Length}] -> {Area}";
+    }
+    #endregion
+
+    #region hiding members
+    class Parent
+    {
+        public void Foo() => Console.WriteLine("Foo of Parent");
+        public virtual void Bar() => Console.WriteLine("virtual Bar of Parent");
+    }
+    class Child1 : Parent { }
+    class Child2 : Parent 
+    {
+        public new void Foo() => Console.WriteLine("Foo of Child2");
+    }
+    class Child3 : Parent
+    {
+        public new virtual void Bar() => Console.WriteLine("virtual Bar of Child3");
+    }
+    class Child4: Child3
+    {
+        public override void Bar() => Console.WriteLine("virtual Bar of Child4");
+    }
+    #endregion
+}

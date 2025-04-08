@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35027.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pandaDemo", "pandaDemo\pandaDemo.csproj", "{31BFD8CE-AD3F-4BD3-B094-BD1DF378F5B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarDemo", "CarDemo\CarDemo.csproj", "{ED2A1726-B093-46DA-A693-FA74B3085F31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DateDemo", "DateDemo\DateDemo.csproj", "{A7338C7D-3F8C-49DA-8B47-1FCAA618610B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{31BFD8CE-AD3F-4BD3-B094-BD1DF378F5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31BFD8CE-AD3F-4BD3-B094-BD1DF378F5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31BFD8CE-AD3F-4BD3-B094-BD1DF378F5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31BFD8CE-AD3F-4BD3-B094-BD1DF378F5B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED2A1726-B093-46DA-A693-FA74B3085F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED2A1726-B093-46DA-A693-FA74B3085F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED2A1726-B093-46DA-A693-FA74B3085F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED2A1726-B093-46DA-A693-FA74B3085F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7338C7D-3F8C-49DA-8B47-1FCAA618610B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7338C7D-3F8C-49DA-8B47-1FCAA618610B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7338C7D-3F8C-49DA-8B47-1FCAA618610B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7338C7D-3F8C-49DA-8B47-1FCAA618610B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36C1E658-07E3-4CE5-B756-2B996586B0A2}
+	EndGlobalSection
+EndGlobal
