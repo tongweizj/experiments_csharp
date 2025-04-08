@@ -1,0 +1,17 @@
+﻿<Window x:Class="demo_wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="namespace:demo_wpf"
+        xmlns:controls="clr-namespace:demo_wpf" 
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <controls:CounterUserControl x:Name="counter1" Count="10"/>
+            <controls:CounterUserControl x:Name="counter2" Count="20"/>
+        </StackPanel>
+    </Grid>
+</Window>
+
