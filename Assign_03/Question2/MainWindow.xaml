@@ -1,0 +1,102 @@
+﻿<Window x:Class="Question2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Question2"
+        mc:Ignorable="d"
+        
+        Title="MainWindow" Height="900" Width="800">
+
+    
+    <Grid Margin="16">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "50" />
+            <RowDefinition Height = "80" />
+            <RowDefinition Height = "*" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "50" />
+           
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width = "*" />
+            <ColumnDefinition Width = "*" />
+            <ColumnDefinition Width = "*" />
+            <ColumnDefinition Width = "*" />
+        </Grid.ColumnDefinitions>
+
+
+        <Label Content = "Restaurant Bill Calculator" FontSize = "24" FontWeight = "Bold" Grid.ColumnSpan= "4" Grid.Row = "0"/>
+
+        <StackPanel  Grid.Row = "1" Grid.Column="0" HorizontalAlignment="left">
+            <TextBlock Margin="0" Text="Beverages"  Height="30" FontWeight="Bold"/>
+            <ComboBox Name="BeverageComboBox" Width="180" Height="30" Margin="0" SelectionChanged="BeverageComboBox_SelectionChanged"/>
+        </StackPanel>
+        <StackPanel  Grid.Row = "1" Grid.Column="1" HorizontalAlignment="left">
+            <TextBlock Text="Appetizers" Height="30" FontWeight="Bold"/>
+            <ComboBox Name="AppetizerComboBox" Width="180" Height="30" Margin="0" SelectionChanged="AppetizerComboBox_SelectionChanged"/>
+        </StackPanel>
+        <StackPanel  Grid.Row = "1" Grid.Column="2" HorizontalAlignment="left">
+            <TextBlock Text="MainCourses" Height="30" FontWeight="Bold"/>
+            <ComboBox Name="MainCoursesComboBox" Width="180" Height="30" Margin="0" SelectionChanged="MainCoursesComboBox_SelectionChanged"/>
+        </StackPanel>
+        <StackPanel  Grid.Row = "1" Grid.Column="3" HorizontalAlignment="left">
+            <TextBlock Text="Desserts" Height="30" FontWeight="Bold"/>
+            <ComboBox Name="DessertsComboBox" Width="180" Height="30" Margin="0" SelectionChanged="DessertsComboBox_SelectionChanged"/>
+        </StackPanel>
+        
+
+        <StackPanel Grid.Row = "2" Grid.ColumnSpan="4">
+            
+            <DataGrid  x:Name="billItemsDataGrid"  ItemsSource="{Binding}" AutoGenerateColumns="False"  CanUserAddRows="False" 
+                       SelectionChanged="billItemsDataGrid_SelectionChanged"  
+                       CurrentCellChanged="billItemsDataGrid_CurrentCellChanged" 
+                       CellEditEnding="billItemsDataGrid_CellEditEnding"
+                       BorderBrush="LightGray"          
+                       BorderThickness="0.5"
+                       GridLinesVisibility="All"
+          HorizontalGridLinesBrush="LightGray"
+          VerticalGridLinesBrush="LightGray"
+                       >
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="✔" Binding="{Binding IsSelected, Mode=TwoWay}"/>
+                    <DataGridTextColumn Width="*" Header="Name" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="150" Header="Price" Binding="{Binding Price}" IsReadOnly="True" />
+                    <DataGridTextColumn Width="100" Header="Quantity" Binding="{Binding Quantity,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                    <DataGridTextColumn Width="150" Header="Subtotal" Binding="{Binding Subtotal}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Row = "3" Grid.Column="2" Grid.ColumnSpan="2">
+            <StackPanel   Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="SubTotal:  " FontSize="14"/>
+                <TextBlock x:Name="SubTotalLabel" Text="0" FontSize="14"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Tax (10%):  " FontSize="14"/>
+                <TextBlock  x:Name="TaxLabel" Text="0" FontSize="14"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBlock Text="Total:  " FontSize="16" FontWeight="Bold"/>
+                <TextBlock  x:Name="TotalLabel" Text="0" FontSize="16" FontWeight="Bold"/>
+            </StackPanel>
+        </StackPanel>
+
+
+        <StackPanel Grid.Row = "4" Grid.Column="2" Grid.ColumnSpan="2">
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Delete Item" Background="Red" Foreground="White" FontSize="18" Margin="5"  Width="120" Height="40"
+                        Command="{Binding RemoveSelectedItemsCommand}" Click="Button_Click"/>
+                <Button Content="Clear Bill" Background="Gray" Foreground="White" FontSize="18" Margin="5"  Width="120" Height="40"
+                        Command="{Binding ClearBillCommand}" Click="Button_Click_1"/>
+            </StackPanel>
+
+        </StackPanel>
+
+
+    </Grid>
+</Window>

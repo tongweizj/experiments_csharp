@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlickrViewer", "FlickrViewer\FlickrViewer.csproj", "{9917F1D8-C0A2-6B17-AB9D-B9E9F861B809}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Question2", "Question2\Question2.csproj", "{B5E90342-6F96-400F-BD64-98E0724F1D77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9917F1D8-C0A2-6B17-AB9D-B9E9F861B809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9917F1D8-C0A2-6B17-AB9D-B9E9F861B809}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9917F1D8-C0A2-6B17-AB9D-B9E9F861B809}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9917F1D8-C0A2-6B17-AB9D-B9E9F861B809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5E90342-6F96-400F-BD64-98E0724F1D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5E90342-6F96-400F-BD64-98E0724F1D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5E90342-6F96-400F-BD64-98E0724F1D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5E90342-6F96-400F-BD64-98E0724F1D77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1AFADF8-A6E6-461E-9014-1EE7C49DC370}
+	EndGlobalSection
+EndGlobal
