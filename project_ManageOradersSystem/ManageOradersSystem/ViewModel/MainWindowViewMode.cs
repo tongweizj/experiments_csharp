@@ -1,69 +1,56 @@
 ﻿using ManageOradersSystem.Model;
 using ManageOradersSystem.Models;
+using MOSLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ManageOradersSystem.ViewModel
 {
-    class MainWindowViewMode: ViewModelBase
+    /// <summary>
+    /// 主窗口ViewModel
+    /// 功能：管理订单系统的核心业务逻辑和数据
+    /// </summary>
+    class MainWindowViewMode : ViewModelBase
     {
-        // 单例实现
+        #region 单例实现
+        // 使用Lazy<T>实现线程安全的单例模式
         private static readonly Lazy<MainWindowViewMode> _instance =
             new Lazy<MainWindowViewMode>(() => new MainWindowViewMode());
+
+        /// <summary>
+        /// 获取单例实例
+        /// </summary>
         public static MainWindowViewMode Instance => _instance.Value;
+        #endregion
+        #region 私有字段和依赖
+        private readonly IDataProvider _dataProvider;
+        #endregion
 
-        // basketItems 数据
-        // 全量数据
-        public ObservableCollection<BasketItemViewModel> _basketItems = new ObservableCollection<BasketItemViewModel>();
-        public ObservableCollection<BasketItemViewModel> basketItems
-        {
-            get => _basketItems;
-            set
-            {
-                _basketItems = value;
-                RaisePropertyChanged();
-            }
-        }
-        // data
-        private int _maxBasketItemID;
-        public int maxBasketItemID
-        {
-            get => _maxBasketItemID;
-            set
-            {
-                _maxBasketItemID = value;
-                RaisePropertyChanged();
-            }
-        }
-        // data grid 的显示数据
-        public ObservableCollection<BasketItemViewModel> _filterBasketItems = new ObservableCollection<BasketItemViewModel>();
-        public ObservableCollection<BasketItemViewModel> filterBasketItems
-        {
-            get => _filterBasketItems;
-            set
-            {
-                _filterBasketItems = value;
-                RaisePropertyChanged();
-            }
-        }
-        // 构造器
-        private MainWindowViewMode()
-        {
-            //  获取数据库获取原始baskets数据
-            getBasketData();
-            getBasketItemData();
-            // 重置data grid里的数据
-            _selectedBasket = null;
-            //_maxBasketItemID = 0;
-        }
 
+        #region 数据属性
+        private bool _isLoading;
+        /// <summary>
+        /// 是否正在加载数据
+        /// </summary>
+        public bool IsLoading
+        {
+            get => _isLoading;
+            private set
+            {
+                _isLoading = value;
+                RaisePropertyChanged();
+            }
+        }
+        
         // basket 下拉菜单数据
-        private ObservableCollection<BasketViewModel> _baskets;
-        public ObservableCollection<BasketViewModel> baskets
+        private ObservableCollection<BasketViewModel> _baskets = new ObservableCollection<BasketViewModel>();
+        public ObservableCollection<BasketViewModel> Baskets
         {
             get => _baskets;
             set
@@ -72,7 +59,57 @@ namespace ManageOradersSystem.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        // basketItems 数据
+        // 全量数据
+        public ObservableCollection<BasketItemViewModel> _basketItems = new ObservableCollection<BasketItemViewModel>();
+        public ObservableCollection<BasketItemViewModel> BasketItems
+        {
+            get => _basketItems;
+            set
+            {
+                _basketItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // DataGrid显示数据（经过筛选）
+        public ObservableCollection<BasketItemViewModel> _filterBasketItems = new ObservableCollection<BasketItemViewModel>();
+        
+        /// <summary>
+        /// 当前显示的购物篮商品数据（根据选中购物篮筛选）
+        /// </summary>
+        public ObservableCollection<BasketItemViewModel> FilterBasketItems
+        {
+            get => _filterBasketItems;
+            set
+            {
+                _filterBasketItems = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 当前最大购物篮商品ID（用于新增商品时生成ID）
+        /// </summary>
+        private int _maxBasketItemID;
+        public int MaxBasketItemId
+        {
+            get => _maxBasketItemID;
+            set
+            {
+                _maxBasketItemID = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private BasketViewModel? _selectedBasket;
+
+        /// <summary>
+        /// 当前选中的购物篮
+        /// 设置时会自动触发筛选逻辑
+        /// </summary>
         public BasketViewModel? SelectedBasket
         {
             get => _selectedBasket;
@@ -83,70 +120,125 @@ namespace ManageOradersSystem.ViewModel
                 UpdateFilterBasketItems(); //更新选择的basket后，更新 DataGrid数据
             }
         }
+        #endregion
 
-        public void getBasketData()
+        #region 构造函数
+
+        /// <summary>
+        /// 私有构造函数（单例模式）
+        /// </summary>
+        private MainWindowViewMode()
         {
-            var rawData = DataProvider.GetBasketData();
-            if (rawData is not null)
-            {
-                baskets = new();
-                foreach (var basket in rawData)
-                {
-                    // 将原始数据 basket 转换为 BasketItemViewModel，并添加到集合中。
-                    baskets.Add(new BasketViewModel(basket));
-                }
-            }
-
-            RaisePropertyChanged();
-
+            // 初始化数据访问对象
+            _dataProvider = new DataProvider(new OmsContext());
         }
-        public void getBasketItemData()
+        #endregion
+
+        #region 公共方法
+
+        /// <summary>
+        /// 异步初始化数据
+        /// </summary>
+        public async Task InitializeAsync()
         {
-            var rawBasketItemsData = DataProvider.GetBasketItemData();
-            if (rawBasketItemsData is not null)
+            IsLoading = true;
+            try
             {
-
-                // 清空现有集合而不是创建新实例，以保持绑定
-                _basketItems.Clear();
-                foreach (var basketItem in rawBasketItemsData)
-                {
-
-                    var itemVm = new BasketItemViewModel(basketItem);
-                    _basketItems.Add(itemVm);
-                    if (basketItem.IdBasketItem > _maxBasketItemID)
-                    {
-                        _maxBasketItemID = basketItem.IdBasketItem;
-                    }
-                }
+                // 并行加载数据
+                var loadBasketsTask = LoadBasketsAsync();
+                var loadBasketItemsTask = LoadBasketItemsAsync();
+                await Task.WhenAll(loadBasketsTask, loadBasketItemsTask);
             }
-            // 更新筛选结果
-            UpdateFilterBasketItems();
-            RaisePropertyChanged(nameof(basketItems));
-            RaisePropertyChanged(nameof(maxBasketItemID));
-            RaisePropertyChanged();
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"初始化失败: {ex}");
+                MessageBox.Show($"数据加载失败: {ex.Message}");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
-        public void UpdateFilterBasketItems()
-        {
+        #endregion
 
+        #region 私有方法
+
+        /// <summary>
+        /// 异步加载购物篮数据
+        /// </summary>
+        private async Task LoadBasketsAsync()
+        {
+            try
+            {
+                var baskets = await _dataProvider.GetBasketDataAsync();
+                var tempCollection = new ObservableCollection<BasketViewModel>(
+                    baskets.Select(b => new BasketViewModel(b)));
+
+                // 在UI线程更新集合
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    Baskets = tempCollection;
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"加载Baskets失败: {ex}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 异步加载购物篮商品数据
+        /// </summary>
+        private async Task LoadBasketItemsAsync()
+        {
+            try
+            {
+                var items = await _dataProvider.GetBasketItemDataAsync();
+                var tempCollection = new ObservableCollection<BasketItemViewModel>(
+                    items.Select(i => new BasketItemViewModel(i)));
+
+                // 计算最大ID
+                int maxId = items.Any() ? items.Max(i => i.IdBasketItem) : 0;
+
+                // 在UI线程更新集合
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    BasketItems = tempCollection;
+                    MaxBasketItemId = maxId;
+                    UpdateFilterBasketItems();
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"加载BasketItems失败: {ex}");
+                throw;
+            }
+        }
+        #endregion
+
+
+        #region 数据过滤方法
+        /// <summary>
+        /// 根据选中的购物篮筛选商品数据
+        /// </summary>
+        private void UpdateFilterBasketItems()
+        {
             if (SelectedBasket == null)
             {
-                //filterBasketItems = new ObservableCollection<BasketItemViewModel>();
+                FilterBasketItems.Clear();// 清空筛选结果
                 return;
             }
-
-            // 使用当前内存中的 basketItems 进行筛选
-            var filteredItems = basketItems
+            // 筛选当前购物篮的商品
+            var filtered = BasketItems
                 .Where(item => item != null && item.IdBasket == SelectedBasket.IdBasket)
                 .ToList();
 
-            // 只有当筛选结果不同时才更新
-            if (!filteredItems.SequenceEqual(filterBasketItems))
+            if (!filtered.SequenceEqual(FilterBasketItems))
             {
-                filterBasketItems = new ObservableCollection<BasketItemViewModel>(filteredItems);
-                RaisePropertyChanged(nameof(filterBasketItems));
+                FilterBasketItems = new ObservableCollection<BasketItemViewModel>(filtered);
             }
-
         }
+        #endregion
     }
 }

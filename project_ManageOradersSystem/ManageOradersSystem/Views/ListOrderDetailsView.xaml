@@ -11,19 +11,41 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-
+        
+        <!-- 
+            ComboBox 绑定说明：
+            1. 当前通过代码后端（如 BasketComboBox_SelectionChanged）处理选项变更事件，
+               但理想情况下应改用 MVVM 模式的 Command 绑定（如 SelectedItem="{Binding SelectedBasket}"）。
+            2. 未使用 ItemsSource 绑定数据源，需在 ViewModel 中定义 ObservableCollection 并绑定。
+        -->
         <StackPanel  Grid.Row = "0" Orientation="Horizontal" HorizontalAlignment="left" Margin="0 20 0 10">
             <TextBlock Margin="0 0 10 0" Text="Basket: "  FontSize = "16" Height="20"/>
-            <ComboBox Name="BasketComboBox" Width="150" Height="25" Margin="0" SelectionChanged="BasketComboBox_SelectionChanged"/>
+            <ComboBox Name="BasketComboBox" 
+                      Width="150" 
+                      Height="25" 
+                      Margin="0"
+                      ItemsSource="{Binding Baskets}"
+                      DisplayMemberPath="NameShopper"                      
+                      SelectedItem="{Binding SelectedBasket}"
+                      />
         </StackPanel>
-        
+        <!-- 
+        VirtualizingStackPanel.IsVirtualizing="True"
+         启用虚拟化 -->
+        <!--  VirtualizingStackPanel.VirtualizationMode="Recycling"
+        复用行提升性能 -->
+        <!--ScrollViewer.CanContentScroll="True"
+        必需属性 -->
+
         <StackPanel Grid.Row = "1" >
             <DataGrid  x:Name="basketItemsDataGrid"  
-                   ItemsSource="{Binding filterBasketItems}" 
+                   ItemsSource="{Binding FilterBasketItems}" 
                    AutoGenerateColumns="False"  
                    CanUserAddRows="False" 
-                   BorderBrush="LightGray"          
+                   VirtualizingStackPanel.IsVirtualizing="True"
+                   VirtualizingStackPanel.VirtualizationMode="Recycling"
+                   ScrollViewer.CanContentScroll="True"
+                BorderBrush="LightGray"          
                    BorderThickness="0.5"
                    GridLinesVisibility="All"
       HorizontalGridLinesBrush="LightGray"

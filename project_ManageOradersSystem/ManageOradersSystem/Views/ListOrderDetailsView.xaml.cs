@@ -25,32 +25,20 @@ namespace ManageOradersSystem.Views
         public DataGridTab()
         {
             InitializeComponent();
-            _mainWindowViewMode = MainWindowViewMode.Instance;
-            DataContext = _mainWindowViewMode;
+            DataContext = MainWindowViewMode.Instance;
 
-            BindComboBoxes();
-        }
-        private void BindComboBoxes()
-        {
-            // 将viewModel中的baskets 数据，绑定给combobox
-            var basketList = _mainWindowViewMode.baskets.ToList();
-            BasketComboBox.ItemsSource = basketList;
-            BasketComboBox.DisplayMemberPath = "NameShopper";
-            BasketComboBox.SelectedValuePath = "IdBasket";
-        }
-        private void BasketComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            // 获取选中的项
-            var selectedBasket = BasketComboBox.SelectedItem as BasketViewModel;
-
-            // 在这里执行您的方法
-            if (selectedBasket != null)
+            Loaded += async (s, e) =>
             {
-                // 在这里执行您的方法
-                _mainWindowViewMode.SelectedBasket = selectedBasket;
-
-            }
-
+                try
+                {
+                    await MainWindowViewMode.Instance.InitializeAsync();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"数据加载失败: {ex.Message}");
+                }
+            };
         }
+ 
     }
 }

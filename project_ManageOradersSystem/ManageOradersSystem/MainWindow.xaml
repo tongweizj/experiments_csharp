@@ -7,30 +7,38 @@
         xmlns:views="clr-namespace:ManageOradersSystem.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
-
+    <!-- 
+        主窗口定义
+        功能：作为应用程序主容器，包含顶部标题、中部选项卡和底部操作按钮
+    -->
+    <!-- 主布局网格 -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- 用于Text控件 -->
+            <!-- 第0行：标题区域（自动高度） -->
             <RowDefinition Height="*"/>
-            <!-- 用于TabControl -->
+            <!-- 第1行：选项卡区域（剩余空间） -->
             <RowDefinition Height = "100" />
-            <!-- use exit button-->
+            <!-- 第2行：底部按钮区域（固定高度） -->
+         
         </Grid.RowDefinitions>
-        
+        <!-- 系统标题 -->
         <TextBlock Grid.Row="0" Text="Orader Manager System" 
                FontSize="24" FontWeight="Bold" Margin="10"
                HorizontalAlignment="Center"/>
+
+        <!-- 功能选项卡 -->
         <TabControl Grid.Row="1">
             <TabItem Header="List Order Details">
                 <views:DataGridTab/>
+                <!-- 嵌入DataGridTab用户控件 -->
             </TabItem>
-
+            <!-- 添加商品页签 -->
             <TabItem Header="Add Item to Order">
                 <views:ProductTab/>
             </TabItem>
         </TabControl>
-
+        <!-- 底部操作按钮区 -->
         <StackPanel Grid.Row = "2">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10,50,10">
                 <Button Content="Exit" 

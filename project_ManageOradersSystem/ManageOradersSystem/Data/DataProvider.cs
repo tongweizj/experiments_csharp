@@ -8,74 +8,107 @@ using System.Text;
 using System.Threading.Tasks;
 using MOSLibrary.Models;
 
+
 namespace ManageOradersSystem.Model
 {
-    public class DataProvider
+    /// <summary>
+    /// 数据提供者接口
+    /// 定义获取业务数据的方法契约
+    /// </summary>
+    public interface IDataProvider
+    {
+        /// <summary>
+        /// 异步获取购物篮数据（包含关联的购物者信息）
+        /// </summary>
+        Task<List<NewBasket>> GetBasketDataAsync();
+
+        /// <summary>
+        /// 异步获取购物篮商品明细数据（包含关联的商品信息）
+        /// </summary>
+        Task<List<NewBasketItem>> GetBasketItemDataAsync();
+        /// <summary>
+        /// 异步获取所有商品数据
+        /// </summary>
+        Task<List<Product>> GetProductDataAsync();
+    }
+
+    /// <summary>
+    /// 数据提供者实现类
+    /// 封装所有数据库访问操作
+    /// </summary>
+    public class DataProvider: IDataProvider
     {
 
-        public static List<NewBasket> GetBasketData()
+        /// <summary>
+        /// 构造函数（保留DI兼容性，实际未使用注入的上下文）
+        /// </summary>
+        /// <param name="dbContext">理论上可注入的DbContext（当前实现中未使用）</param>
+        public DataProvider(OmsContext dbContext)
         {
-            using (OmsContext dbContext = new OmsContext())
+            
+        }
+        /// <summary>
+        /// 异步获取购物篮数据
+        /// 返回格式：购物篮信息 + 关联购物者邮箱
+        /// </summary>
+        public async Task<List<NewBasket>> GetBasketDataAsync()
+        {
+            using (var context = new OmsContext())  // 每次创建新实例
             {
-                Console.WriteLine("Querying for baskets");
-
-                List<NewBasket> basketList = dbContext.Baskets
-                .Join(
-                    dbContext.Shoppers,
-                    Basket => Basket.IdShopper,
-                    Shopper => Shopper.IdShopper,
-                    (Basket, Shopper) => new NewBasket
+                return await context.Baskets
+                .Join(context.Shoppers,
+                    b => b.IdShopper,  // 购物篮关联购物者的外键
+                    s => s.IdShopper,  // 购物者主键
+                    (b, s) => new NewBasket  // 结果映射
                     {
-                        IdBasket = Basket.IdBasket,
-                        IdShopper = Basket.IdShopper,
-                        NameShopper = $"{Shopper.Email} {Basket.IdBasket}", 
-                          
-                        Quantity = Basket.Quantity,
-                        SubTotal = Basket.SubTotal,
-                        OrderDate = Basket.OrderDate
+                        IdBasket = b.IdBasket,
+                        IdShopper = b.IdShopper,
+                        NameShopper = $"{s.Email} {b.IdBasket}",
+                        Quantity = b.Quantity,
+                        SubTotal = b.SubTotal,
+                        OrderDate = b.OrderDate
                     })
-                .ToList();
-
-                return basketList;
+                .ToListAsync(); // 异步执行查询
             }
         }
 
 
-        public static List<NewBasketItem> GetBasketItemData()
+        /// <summary>
+        /// 异步获取购物篮商品明细
+        /// 返回格式：商品明细 + 关联商品名称和价格
+        /// </summary>
+        public async Task<List<NewBasketItem>> GetBasketItemDataAsync()
         {
-            using (OmsContext dbContext = new OmsContext())
+            using (var context = new OmsContext())  // 每次创建新实例
             {
-                List<NewBasketItem> basketItemList = dbContext.BasketItems
-               .Join(
-                   dbContext.Products,
-                   NewBasketItem => NewBasketItem.IdProduct,
-                   Product => Product.IdProduct,
-                   (NewBasketItem, Product) => new NewBasketItem
-                   {
-                       IdBasketItem = NewBasketItem.IdBasketItem,
-                       IdProduct = NewBasketItem.IdProduct,
-                       NameProduct = Product.ProductName,
-                       PriceProduct = Product.Price,
-                       Quantity = NewBasketItem.Quantity,
-                       IdBasket = NewBasketItem.IdBasket
-                   })
-               .ToList();
-                return basketItemList;
+                return await context.BasketItems
+                .Join(context.Products,
+                    i => i.IdProduct, // 购物篮关联购物者的外键
+                    p => p.IdProduct,
+                    (i, p) => new NewBasketItem
+                    {
+                        IdBasketItem = i.IdBasketItem,
+                        IdProduct = i.IdProduct,
+                        NameProduct = p.ProductName,
+                        PriceProduct = p.Price,
+                        Quantity = i.Quantity,
+                        IdBasket = i.IdBasket
+                    })
+                .ToListAsync();
             }
         }
 
-        public static List<Product> GetProductData()
+        /// <summary>
+        /// 异步获取所有商品数据
+        /// 按商品ID排序返回
+        /// </summary>
+        public async Task<List<Product>> GetProductDataAsync()
         {
-            using (OmsContext dbContext = new OmsContext())
+            using (var context = new OmsContext())  // 每次创建新实例
             {
-                Console.WriteLine("Querying for produts");
-
-                // 直接执行查询并转换为 List<Basket>
-                List<Product> ProductList = dbContext.Products
-                    .OrderBy(b => b.IdProduct)
-                    .ToList(); // 关键：调用 ToList() 执行查询并转换
-
-                return ProductList;
+                return await context.Products
+                .OrderBy(p => p.IdProduct)
+                .ToListAsync();
             }
         }
     }

@@ -8,15 +8,26 @@ using MOSLibrary.Models;
 
 namespace ManageOradersSystem.ViewModel
 {
+    /// <summary>
+    /// 购物篮商品项的ViewModel
+    /// 功能：包装NewBasketItem模型，提供属性变更通知支持
+    /// </summary>
     public class BasketItemViewModel: ViewModelBase
     {
         private readonly NewBasketItem _model;
+
+        /// <summary>
+        /// 基于已有模型创建ViewModel
+        /// </summary>
+        /// <param name="model">从数据库获取的原始模型</param>
         public BasketItemViewModel(NewBasketItem model)
         {
             _model = model;
         }
 
-        // 新增便捷构造函数
+        /// <summary>
+        /// 便捷构造函数（用于新建商品项场景）
+        /// </summary>
         public BasketItemViewModel(int idBasketItem, short? idProduct, string nameProduct,
                                  decimal? priceProduct, byte? quantity, int? idBasket)
         {
@@ -31,8 +42,9 @@ namespace ManageOradersSystem.ViewModel
             };
         }
 
-        //public int Id => _model.Id;
-
+        /// <summary>
+        /// 购物篮商品项ID
+        /// </summary>
         public int IdBasketItem
         {
             get => _model.IdBasketItem;
@@ -43,6 +55,10 @@ namespace ManageOradersSystem.ViewModel
             }
         }
 
+
+        /// <summary>
+        /// 关联的商品ID
+        /// </summary>
         public short? IdProduct
         {
             get => _model.IdProduct;
@@ -52,6 +68,10 @@ namespace ManageOradersSystem.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        /// <summary>
+        /// 商品名称（显示用）
+        /// </summary>
         public string? NameProduct
         {
             get => _model.NameProduct;
@@ -91,6 +111,9 @@ namespace ManageOradersSystem.ViewModel
             }
         }
 
+        /// <summary>
+        /// 关联的购物篮导航属性
+        /// </summary>
         public Basket? IdBasketNavigation
         {
             get => _model.IdBasketNavigation;
@@ -102,6 +125,9 @@ namespace ManageOradersSystem.ViewModel
         }
 
 
+        /// <summary>
+        /// 关联的商品导航属性
+        /// </summary>
         public Product? IdProductNavigation
         {
             get => _model.IdProductNavigation;

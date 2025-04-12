@@ -24,21 +24,5 @@ namespace ManageOradersSystem.ViewModel
         {
             _mainWindowViewMode = MainWindowViewMode.Instance;
         }
-
-
-
-   
-
-
-
-
-
-
-
-   
-
     }
-
-      
-    
 }
