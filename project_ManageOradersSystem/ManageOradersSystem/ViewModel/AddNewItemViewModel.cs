@@ -22,11 +22,7 @@ namespace ManageOradersSystem.ViewModel
         public BasketViewModel SelectedBasket
         {
             get => _selectedBasket;
-            set
-            {
-                _selectedBasket = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _selectedBasket, value);
         }
 
         public ObservableCollection<ProductViewModel> Products { get; } = new ObservableCollection<ProductViewModel>();
@@ -35,22 +31,15 @@ namespace ManageOradersSystem.ViewModel
         public ProductViewModel SelectedProduct
         {
             get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value;
-                RaisePropertyChanged();
-            }
+            set => SetProperty(ref _selectedProduct, value);
         }
 
         private byte _quantity = 1;
         public byte Quantity
         {
             get => _quantity;
-            set
-            {
-                _quantity = value;
-                RaisePropertyChanged();
-            }
+
+            set => SetProperty(ref _quantity, value);
         }
         #endregion
         #region 构造函数
@@ -128,7 +117,7 @@ namespace ManageOradersSystem.ViewModel
                 }
 
                 // 更新ViewModel
-                _mainWindowViewModel.MaxBasketItemId = newBasketItemId;
+                _mainWindowViewModel.SetMaxBasketItemId(newBasketItemId);
 
                 var newItemVm = new BasketItemViewModel(
                     newBasketItemId,

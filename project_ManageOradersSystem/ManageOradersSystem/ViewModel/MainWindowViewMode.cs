@@ -40,12 +40,8 @@ namespace ManageOradersSystem.ViewModel
         /// </summary>
         public bool IsLoading
         {
-            get => _isLoading;
-            private set
-            {
-                _isLoading = value;
-                RaisePropertyChanged();
-            }
+            get => _isLoading;      
+            private set => SetProperty(ref _isLoading, value);
         }
         
         // basket 下拉菜单数据
@@ -53,11 +49,7 @@ namespace ManageOradersSystem.ViewModel
         public ObservableCollection<BasketViewModel> Baskets
         {
             get => _baskets;
-            set
-            {
-                _baskets = value;
-                RaisePropertyChanged();
-            }
+            private set => SetProperty(ref _baskets, value);
         }
 
         // basketItems 数据
@@ -66,11 +58,7 @@ namespace ManageOradersSystem.ViewModel
         public ObservableCollection<BasketItemViewModel> BasketItems
         {
             get => _basketItems;
-            set
-            {
-                _basketItems = value;
-                RaisePropertyChanged();
-            }
+            private set => SetProperty(ref _basketItems, value);
         }
 
         // DataGrid显示数据（经过筛选）
@@ -82,11 +70,7 @@ namespace ManageOradersSystem.ViewModel
         public ObservableCollection<BasketItemViewModel> FilterBasketItems
         {
             get => _filterBasketItems;
-            set
-            {
-                _filterBasketItems = value;
-                RaisePropertyChanged();
-            }
+            private set => SetProperty(ref _filterBasketItems, value);
         }
 
         /// <summary>
@@ -96,11 +80,7 @@ namespace ManageOradersSystem.ViewModel
         public int MaxBasketItemId
         {
             get => _maxBasketItemID;
-            set
-            {
-                _maxBasketItemID = value;
-                RaisePropertyChanged();
-            }
+            private set => SetProperty(ref _maxBasketItemID, value);
         }
 
 
@@ -115,9 +95,10 @@ namespace ManageOradersSystem.ViewModel
             get => _selectedBasket;
             set
             {
-                _selectedBasket = value;
-                RaisePropertyChanged();
-                UpdateFilterBasketItems(); //更新选择的basket后，更新 DataGrid数据
+                if (SetProperty(ref _selectedBasket, value))
+                {
+                    UpdateFilterBasketItems();
+                }//更新选择的basket后，更新 DataGrid数据
             }
         }
         #endregion
@@ -158,6 +139,12 @@ namespace ManageOradersSystem.ViewModel
             {
                 IsLoading = false;
             }
+        }
+
+        public void SetMaxBasketItemId(int newId)
+        {
+            _maxBasketItemID = newId;
+            RaisePropertyChanged(nameof(MaxBasketItemId));
         }
         #endregion
 
