@@ -11,3 +11,12 @@
 
 Mian 存放所有小项目的最终版本
 code-assign-xxx 课程号-作业版本
+
+### 目录说明
+
+```
+|
+|--centennial_123 // Programming2
+|--centennial_212 // Programming3
+|--project_ManageOradersSystem // 目前做的最复杂最完整的项目
+```
