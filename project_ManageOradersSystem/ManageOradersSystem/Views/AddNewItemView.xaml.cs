@@ -1,5 +1,4 @@
-﻿using ManageOradersSystem.Models;
-using ManageOradersSystem.ViewModel;
+﻿using ManageOradersSystem.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,0 +1,38 @@
+# Develop Apps to Use an Existing Database
+
+## add new project
+
+class library
+
+## Install NuGet package
+
+- Microsoft.EntityFrameworkCore.SqlServer
+- Microsoft.EntityFrameworkCore.Tools 
+
+
+## Use an Existing Database
+
+Create data model from the existing database by executing scaffold-DbContext command at PMC
+
+setp1: 设定启动项目
+在解决方案资源管理器中右键点击 OMSLibrary 项目
+选择"设为启动项目"
+
+注意
+不用自己写`OMSContext.cs`
+
+```
+scaffold-DbContext "Data Source=.\SQLEXPRESS;Database=OMS;User ID=sa;Password=blogadmin;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+```
+
+Setp2：检查
+检查Models 文件夹
+
+Setp3：复原启动项目
+
+
+## Add the class library to project
+
+右键点击WPF项目
+add->Project reference
+在新窗口，勾选 class library

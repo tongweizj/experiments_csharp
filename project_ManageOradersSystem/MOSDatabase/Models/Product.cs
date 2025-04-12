@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ManageOradersSystem.Models;
+namespace MOSLibrary.Models;
 
 public partial class Product
 {
