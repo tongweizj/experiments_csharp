@@ -58,7 +58,7 @@ namespace ManageOradersSystem.ViewModel
             getBasketItemData();
             // 重置data grid里的数据
             _selectedBasket = null;
-            _maxBasketItemID = 0;
+            //_maxBasketItemID = 0;
         }
 
         // basket 下拉菜单数据
