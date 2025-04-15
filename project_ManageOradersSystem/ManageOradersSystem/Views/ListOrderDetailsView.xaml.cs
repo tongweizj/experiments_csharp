@@ -26,15 +26,17 @@ namespace ManageOradersSystem.Views
         {
             InitializeComponent();
             DataContext = MainWindowViewMode.Instance;
-
+            // 当窗口加载完成（Loaded 事件）时，执行一个异步的事件处理器
             Loaded += async (s, e) =>
             {
                 try
                 {
+                    // 异步调用 MainWindowViewMode 的单例实例的初始化方法
                     await MainWindowViewMode.Instance.InitializeAsync();
                 }
                 catch (Exception ex)
                 {
+                    // 如果初始化过程中发生异常，则显示一个错误提示框，提示用户“数据加载失败”并附带具体异常信息
                     MessageBox.Show($"数据加载失败: {ex.Message}");
                 }
             };

@@ -28,7 +28,9 @@ namespace ManageOradersSystem.ViewModel
         /// </summary>
         public static MainWindowViewMode Instance => _instance.Value;
         #endregion
+
         #region 私有字段和依赖
+        // 数据库入口
         private readonly IDataProvider _dataProvider;
         #endregion
 
@@ -157,11 +159,18 @@ namespace ManageOradersSystem.ViewModel
         {
             try
             {
+                // 从数据提供者（_dataProvider）异步获取购物篮数据
+                // GetBasketDataAsync 可能是访问数据库或 Web API，因此使用 await 等待异步结果
                 var baskets = await _dataProvider.GetBasketDataAsync();
+
+                // 将获取到的原始 basket 数据集合转换为 ViewModel 对象集合
+                // 用于与界面（UI）进行绑定（MVVM模式中的常规做法）
+                // Select() 是 LINQ 中的投影方法，逐个转换为 BasketViewModel 实例
                 var tempCollection = new ObservableCollection<BasketViewModel>(
                     baskets.Select(b => new BasketViewModel(b)));
 
-                // 在UI线程更新集合
+                // 在 UI 线程上更新绑定的 Baskets 属性
+                // WPF 中，UI 控件只能由 UI 线程操作，不能从后台线程直接修改绑定集合
                 await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     Baskets = tempCollection;
@@ -186,6 +195,9 @@ namespace ManageOradersSystem.ViewModel
                     items.Select(i => new BasketItemViewModel(i)));
 
                 // 计算最大ID
+                // 声明并初始化一个名为 maxId 的整数变量
+                // 如果 items 集合中有元素，则取出所有元素中最大的 IdBasketItem 值作为 maxId；
+                // 否则（即集合为空），maxId 设置为 0
                 int maxId = items.Any() ? items.Max(i => i.IdBasketItem) : 0;
 
                 // 在UI线程更新集合
@@ -211,18 +223,24 @@ namespace ManageOradersSystem.ViewModel
         /// </summary>
         private void UpdateFilterBasketItems()
         {
+            // 如果当前没有选中的购物篮（例如界面还没加载好或用户没选）
             if (SelectedBasket == null)
             {
+                // 清空之前筛选的商品列表
                 FilterBasketItems.Clear();// 清空筛选结果
                 return;
             }
             // 筛选当前购物篮的商品
             var filtered = BasketItems
+                // 只保留那些非 null 且 IdBasket 等于选中购物篮 Id 的商品
                 .Where(item => item != null && item.IdBasket == SelectedBasket.IdBasket)
                 .ToList();
-
+            // 判断当前筛选结果与已有的 FilterBasketItems 是否相同
+            // 如果不同，就更新集合，触发 UI 的刷新
             if (!filtered.SequenceEqual(FilterBasketItems))
             {
+                // 创建新的 ObservableCollection，并赋值给绑定属性
+                // 这样 UI（如 ListBox 或 DataGrid）会自动更新显示的内容
                 FilterBasketItems = new ObservableCollection<BasketItemViewModel>(filtered);
             }
         }
