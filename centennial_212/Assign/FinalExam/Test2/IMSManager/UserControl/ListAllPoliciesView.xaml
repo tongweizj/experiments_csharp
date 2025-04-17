@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="IMSManager.ListAllPoliciesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:IMSManager" xmlns:viewModel="clr-namespace:IMSManager.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="350"
+             d:DesignWidth="800"
+             FontSize="14">
+
+    <UserControl.DataContext>
+        <viewModel:ListAllPoliciesViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <Label Content="Agent: "
+               HorizontalAlignment="Right"
+               VerticalAlignment="Center" />
+        <ComboBox Name="AgentListComboBox"
+                  Grid.Column="1"
+                  Margin="5,5,335,5" 
+                    ItemsSource="{Binding AgentList}"
+  DisplayMemberPath="Fname"                      
+  SelectedItem="{Binding SelectedAgent}"
+                  
+                  >
+       
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Id}" />
+                        <TextBlock Text="  " />
+                        <TextBlock Text="{Binding Fname}" />
+                        <TextBlock Text="  " />
+                        <TextBlock Text="{Binding Lname}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <DataGrid   Grid.Row="1"
+                    x:Name="dataGrid"
+                  
+                    Grid.ColumnSpan="2"
+                    Margin="5,5,5,5"
+                    AutoGenerateColumns="False"
+                    AlternatingRowBackground="LightBlue"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    ItemsSource="{Binding PolicyDetailsContents}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Policy ID"
+                                    Width="Auto"
+                                    IsReadOnly="True" 
+                                    Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="Product"
+                                    Width="Auto" 
+                                    Binding="{Binding ProductName}"/>
+                <DataGridTextColumn Header="Yearly Premium "
+                                    Width="*" 
+                                    Binding="{Binding Premium}"/>
+                <DataGridTextColumn Header="Insured "
+                                    Width="*" 
+                                    Binding="{Binding Insured}"/>
+                <DataGridTextColumn Header="Policy Starting Date"
+                                    Width="*" 
+                                    Binding="{Binding PolicyDate}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
